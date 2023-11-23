@@ -10,12 +10,16 @@ The class board has the following functions:
     check: check if the move is valid
     save: save the game
     load: load the game
+    get_history: get the history of the game
+    get_situ: get the situation of the board (to avoid usage of pointers)
+    get_score: get the score of the game
 This code is a kernal part of the project Reversi (Demo), and can be reused in advanced versions of the project.
 */
 #include <iostream>
 #include <iomanip>
 #include <vector>
 #include <fstream>
+#include <utility>
 
 using namespace std;
 
@@ -161,5 +165,19 @@ public:
         *this = temp;
         inFile.close();
     }
+    vector<node> get_history(){
+        return history;
+    }
+    int get_situ(int x,int y){
+        return situ[x][y];
+    }//we return the situation of the board to the AI, once a position, to avoid usage of pointers
+    pair<int,int> get_score(){
+        int black=0,white=0;
+        for(int i=0;i<8;i++)
+            for(int j=0;j<8;j++)
+                if(situ[i][j]==1)black++;
+                else if(situ[i][j]==-1)white++;
+        return make_pair(black,white);
+    }//count the numbers of black and white pieces
 };
         

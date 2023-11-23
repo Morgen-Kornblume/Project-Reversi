@@ -38,3 +38,17 @@ Target: Design a demo version of the game using object-oriented programming.
 - `void save(string filename)`: Save the game to a file in the format of `.rps`.
 
 - `void load(string filename)`: Load the game from a file in the format of `.rps`.
+
+- `vector<node> get_history()`: Get the history of the game.
+
+- `int get_situ(int x,int y)`: Get the situation of a position on the board. (To avoid the usage of pointers)
+
+- `pair<int,int> get_score()`: Get the score of the game.(Count the number of pieces of each color)
+
+### Player (Human)
+
+#### Private Members
+
+
+
+#### Public Members
