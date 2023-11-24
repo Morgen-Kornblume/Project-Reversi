@@ -5,7 +5,6 @@ Target: Design a demo version of the game using object-oriented programming.
 ## Objects
 
 - `Board`: The board of the game, which contains the information of the pieces on the board.
-- `Player`: The human player of the game, which contains the information of the player.
 - `AI`: The AI player of the game, which contains the information of the player and the algorithm of the AI.
 - `Game`: The game, which contains the information of the game and the functions of the game.
 
@@ -45,10 +44,18 @@ Target: Design a demo version of the game using object-oriented programming.
 
 - `pair<int,int> get_score()`: Get the score of the game.(Count the number of pieces of each color)
 
-### Player (Human)
+### Game 
 
 #### Private Members
 
-
+- `Board br`: The board of the game, which contains the information of the pieces on the board.
 
 #### Public Members
+
+- `Game()`: The constructor of the game, which initializes the game.
+
+- `void start()`: Start the game.
+
+- `void round(int color)`: Start a round of the game , `color` is the color of the player to move.
+
+- `void replay(string filename)`: Replay the given game.

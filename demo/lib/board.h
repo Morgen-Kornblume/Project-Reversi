@@ -139,6 +139,7 @@ public:
         temp.print();
     }
     void undo(){
+        if(history.empty())return;
         history.pop_back();
         board temp;
         for(node tmp:history)
@@ -179,5 +180,22 @@ public:
                 else if(situ[i][j]==-1)white++;
         return make_pair(black,white);
     }//count the numbers of black and white pieces
+    vector<node> get_hint(int color){
+        vector<node> ans;
+        for(int i=0;i<8;i++)
+            for(int j=0;j<8;j++)
+                if(check(node(i,j,color)))
+                    ans.push_back(node(i+1,j+1,color));
+        return ans;
+    }//get the hint of the next move
+    int round_determin(int color){
+        pair<int,int> score=get_score();
+        bool flag1=false,flag2=false;
+        if(get_hint(color).size()!=0)flag1=true;
+        if(get_hint(-color).size()!=0)flag2=true;
+        if(flag2)return -color;
+        else if (flag1)return color;
+        else return 0;
+    }
 };
         
