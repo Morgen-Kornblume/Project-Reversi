@@ -34,3 +34,6 @@
 # Debug files
 debug-board.cpp
 *.rps
+
+# release files
+releases/
