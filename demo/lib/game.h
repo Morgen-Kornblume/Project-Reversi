@@ -180,7 +180,6 @@ public:
             round(color);
         }
         else if(command=="7355608"){//cheat code
-            cout<<L"You have entered the cheat code!"<<endl;
             //music
             gototag3:
             system("cls");
