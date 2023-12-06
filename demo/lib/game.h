@@ -6,15 +6,21 @@
 #include<windows.h>
 #include<conio.h>
 #include"board.h"
+#include"AI.h"
 using namespace std;
 
 class game{
 private:
     board br; // The board of the game, which contains the information of the pieces on the board.
-
+    int gametype; // The type of the game, 0 for human vs. human, 1 for human vs. AI.
+    int difficulty; // The difficulty of the AI, 1 for random AI, 2 for greedy AI, 3 for minimax AI, 4 for alpha-beta AI, 5 for MCTS AI.
+    //Random_AI RAI;
+    //Greedy_AI GAI;
 public:
     game(){
         br=board();
+        gametype=0;
+        difficulty=0;
     } // The constructor of the game, which initializes the game.
     void start(){
         //command list of the game
@@ -24,8 +30,8 @@ public:
         cout<<"Version: Demo 1.0"<<endl;
         cout<<"Command list: "<<endl;
         cout<<"In following examples, '[(xx)yy]' contains a term, which has a name 'yy' and a type 'xx'. You don't need to really enter '[]'"<<endl;
-        cout<<"command1: start-human [(int)color] -Start a human vs. human game with given one moves first (1:black-AI / -1:white-Human)"<<endl;
-        cout<<"command2: start-AI [(int)Difficulty] [(int)color] -Start a human vs. AI game with given color moves first (1:black / -1:white) (Difficulty:1~5 The higher,The harder)"<<endl;
+        cout<<"command1: start-human [(int)color] -Start a human vs. human game with given one moves first (1:black / -1:white)"<<endl;
+        cout<<"command2: start-AI [(int)Difficulty] [(int)color] -Start a human vs. AI game with given color moves first (1:black / -1:whit) (Difficulty:1~5 The higher,The harder) (AI always uses white pieces)"<<endl;
         cout<<"command3: load [(string)filename] -Load an existing game from file"<<endl;
         cout<<"command4: replay [(string)filename] -Replay an existing game from file"<<endl;
         gototag1:
@@ -45,14 +51,39 @@ public:
             }
         }
         else if(command=="start-AI"){
-            int color,difficulty;
+            int color;
             cin>>difficulty>>color;
             if(difficulty<1||difficulty>5){
                 cout<<"Invalid difficulty!"<<endl;
                 goto gototag1;
             }
             if(color==1||color==-1){
-                //not finished
+                this->gametype=1;
+                switch (difficulty){
+                    case 1:
+                        this->br=board();
+                        //random AI
+                        round(color);
+                        break;
+                    case 2:
+                        this->br=board();
+                        //greedy AI
+                        round(color);
+                        break;
+                    case 3:
+                        this->br=board();
+                        //minimax AI
+                        break;
+                    case 4:
+                        this->br=board();
+                        //alpha-beta AI
+                        break;
+                    case 5:
+                        this->br=board();
+                        //MCTS AI
+                        break;
+                    //more : AI deep learning ...?
+                }
             }
             else{
                 cout<<"Invalid color!"<<endl;
@@ -93,6 +124,33 @@ public:
         }
     } // Start the game.
     void round(int color){
+        if(gametype==1&&color==-1){
+            //AI move
+            node t;
+            cout<<"AI is thinking... Please wait a moment..."<<endl;
+            switch (difficulty){
+                case 1:
+                    t=Random_AI(color).move(br);
+                    break;
+                case 2:
+                    t=Greedy_AI(color).move(br);
+                    break;
+                case 3:
+                    //t=Minimax_AI(color).move(br);
+                    break;
+                case 4:
+                    //t=AlphaBeta_AI(color).move(br);
+                    break;
+                case 5:
+                    //t=MCTS_AI(color).move(br);
+                    break;
+                //more : AI deep learning ...?
+            }
+            br.move(t);
+            int nxt=br.round_determin(color);
+            if(nxt==0)end(br.get_score());
+            else round(nxt);
+        }
         system("cls");
         br.print();
         cout<<"Player "<<(color==1?"black":"white")<<"'s turn."<<endl;
@@ -137,7 +195,7 @@ public:
         else if(command=="save"){
             string filename;
             cin>>filename;
-            br.save(filename);
+            br.save(filename, gametype, difficulty);
             cout<<"Game saved!"<<endl;
             Beep(600,2000);
             round(color);
@@ -156,7 +214,7 @@ public:
         else if(command=="quit-save"){
             string filename;
             cin>>filename;
-            br.save(filename);
+            br.save(filename, gametype, difficulty);
             cout<<"Game saved!"<<endl;
             Beep(650,2000);
             system("pause");
@@ -202,6 +260,7 @@ public:
         ifstream inFile(filename);
         vector<node> operations;
         int x, y, z;
+        inFile>>(this->gametype)>>(this->difficulty);
         while (inFile >> x >> y >> z) {
             operations.push_back(node(x, y, z));
             //debug//
@@ -266,6 +325,7 @@ public:
         //cout<<filename<<endl;
         //cout<<(inFile.is_open()?1:0)<<endl;
         ///////////////////
+        inFile>>(this->gametype)>>(this->difficulty);
         int x, y, z;
         while (inFile >> x >> y >> z) {
             operations.push_back(node(x, y, z));
@@ -292,6 +352,8 @@ public:
         else round(nxt);
     } // Load the given game.
     void end(pair<int,int> result){
+        system("cls");
+        br.print();
         if(result.first>result.second)
             cout<<"Black wins!"<<endl;
         else if(result.first<result.second)

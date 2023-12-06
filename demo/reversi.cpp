@@ -1,7 +1,5 @@
 #include<iostream>
 #include"lib/game.h"
-#include"lib/AI.h"
-
 using namespace std;
 
 int main(){

@@ -44,6 +44,10 @@ Target: Design a demo version of the game using object-oriented programming.
 
 - `pair<int,int> get_score()`: Get the score of the game.(Count the number of pieces of each color)
 
+- `vector<node> get_hint(int turn)`: Get the hint of the next move.
+
+- `int round_determin(int color)`: Determine who is the next to move.
+
 ### Game 
 
 #### Private Members
@@ -59,3 +63,33 @@ Target: Design a demo version of the game using object-oriented programming.
 - `void round(int color)`: Start a round of the game , `color` is the color of the player to move.
 
 - `void replay(string filename)`: Replay the given game.
+
+- `void load(string filename)`: Load the game from a file in the format of `.rps`.
+
+- `void end()`: End the game and print the result.
+
+### AI
+
+#### Random_AI
+
+##### Private Members
+
+- `int color`: The color of the AI player.
+
+##### Public Members
+
+- `Random_AI(int color)`: The constructor of the AI, which initializes the AI.
+
+- `node move(Board br)`: Make a move randomly.
+
+#### Greedy_AI
+
+##### Private Members
+
+- `int color`: The color of the AI player.
+
+##### Public Members
+
+- `Greedy_AI(int color)`: The constructor of the AI, which initializes the AI.
+
+- `node move(Board br)`: Make a move using the greedy algorithm, calculate the score of each move and choose the move with the highest score.

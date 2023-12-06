@@ -146,9 +146,10 @@ public:
             temp.move(tmp);
         *this=temp;
     }
-    void save(string filename){
+    void save(string filename,int gametype,int difficulty){
         filename = "saves\\" + filename + ".rps";
         std::ofstream outFile(filename);
+        outFile << gametype << difficulty << "\n";
         for(node tmp : history) {
             outFile << tmp.x << " " << tmp.y << " " << tmp.z << "\n";
         }
